@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,6 +17,8 @@ import com.example.demo.response.AddressRequest;
 import com.example.demo.response.AddressResponse;
 import com.example.demo.response.EmployeeRequest;
 import com.example.demo.response.EmployeeResponse;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @Service
 public class EmployeeService {
@@ -58,7 +61,7 @@ public class EmployeeService {
 		ResponseEntity<AddressResponse> addressByEmployeeId = addressFeign.getAddressByEmployeeId(id);
 
 		AddressResponse addressResponse = addressByEmployeeId.getBody();
-		
+
 		employeeResponse.setAddressResponse(addressResponse);
 
 		return employeeResponse;
@@ -86,9 +89,12 @@ public class EmployeeService {
 		return employeeResponse;
 	}
 
+	@CircuitBreaker(name = "addressservice", fallbackMethod = "FallBack_getEmployeeDetails")
 	public List<EmployeeResponse> getAllEmployeeDetails() {
 
 		List<Employee> employeeDetails = EmployeeRepo.findAll();
+
+		System.out.println("employeeDetails" + employeeDetails);
 
 		List<EmployeeResponse> empResponse = Arrays.asList(modelMapper.map(employeeDetails, EmployeeResponse[].class));
 		ResponseEntity<List<AddressResponse>> allAddress = addressFeign.getAllAddress();
@@ -104,6 +110,42 @@ public class EmployeeService {
 		}
 
 		return empResponse;
+	}
+
+	public List<EmployeeResponse> FallBack_getEmployeeDetails(Throwable t) {
+
+		List<Employee> employeeDetails = EmployeeRepo.findAll();
+		List<EmployeeResponse> empResponse = Arrays.asList(modelMapper.map(employeeDetails, EmployeeResponse[].class));
+		for (EmployeeResponse e : empResponse) {
+			e.setAddressResponse(new AddressResponse());
+		}
+
+		return empResponse;
+	}
+
+	public List<EmployeeResponse> getAllEmployeeDetailsByUsingDepartmentName(String departmentname) {
+
+		List<Employee> allEmployeeByDepartmentName = EmployeeRepo.findAllEmployeeByDepartmentName(departmentname);
+
+		List<EmployeeResponse> empResponse = allEmployeeByDepartmentName.stream().map(emp -> {
+
+			return modelMapper.map(emp, EmployeeResponse.class);
+
+		}).toList();
+
+		ResponseEntity<List<AddressResponse>> allAddress = addressFeign.getAllAddress();
+
+		List<AddressResponse> addressResponse = allAddress.getBody();
+		for (EmployeeResponse emp : empResponse) {
+
+			for (AddressResponse add : addressResponse) {
+				if (emp.getId() == add.getEmployeeId()) {
+					emp.setAddressResponse(add);
+				}
+			}
+		}
+		return empResponse;
+
 	}
 
 //	private AddressResponse callingAddressServiceUsingRESTTemplate(int id) {

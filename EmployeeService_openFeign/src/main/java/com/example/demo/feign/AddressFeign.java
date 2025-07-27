@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.demo.response.AddressRequest;
 import com.example.demo.response.AddressResponse;
 
-@FeignClient(name = "ADDRESSSERVICE", path = "/address-app/api",fallback = FallBackMyAddressFeign.class)
+@FeignClient(name = "address-service")
 public interface AddressFeign {
 
 	@GetMapping("/address/{employeeId}")

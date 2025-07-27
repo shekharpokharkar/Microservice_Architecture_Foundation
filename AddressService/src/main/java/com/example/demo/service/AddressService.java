@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -20,20 +21,14 @@ public class AddressService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public AddressResponse findAddressByEmployeeId(int employeeId) {
-
-		Address address = addressRepo.findAddressByEmployeeId(employeeId);
-
-		System.out.println("address"+address);
-		
-		AddressResponse addressResponse = modelMapper.map(address, AddressResponse.class);
-		System.out.println("addressResponse"+addressResponse);
-		return addressResponse;
-	}
-
 	public List<AddressResponse> findAllAddress() {
 
-		return addressRepo.findAll().stream().map(add -> modelMapper.map(add, AddressResponse.class)).toList();
+		List<Address> all = addressRepo.findAll();
+
+		AddressResponse[] map = modelMapper.map(all, AddressResponse[].class);
+
+		List<AddressResponse> asList = Arrays.asList(map);
+		return asList;
 
 	}
 
@@ -44,5 +39,16 @@ public class AddressService {
 		Address save = addressRepo.save(address);
 
 		return modelMapper.map(save, AddressResponse.class);
+	}
+
+	public AddressResponse findAddressByEmployeeId(int employeeId) {
+
+		Address address = addressRepo.findAddressByEmployeeId(employeeId);
+
+		System.out.println("address" + address);
+
+		AddressResponse addressResponse = modelMapper.map(address, AddressResponse.class);
+		System.out.println("addressResponse" + addressResponse);
+		return addressResponse;
 	}
 }

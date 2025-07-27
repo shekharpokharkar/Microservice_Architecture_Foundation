@@ -9,6 +9,8 @@ public class EmployeeRequest {
 	private String email;
 
 	private String bloodGroup;
+	
+	private String departmentName;
 
 	private AddressResponse addressResponse;// ???
 
@@ -56,6 +58,14 @@ public class EmployeeRequest {
 	public String toString() {
 		return "EmployeeRequest [id=" + id + ", name=" + name + ", email=" + email + ", bloodGroup=" + bloodGroup
 				+ ", addressResponse=" + addressResponse + "]";
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 
 }

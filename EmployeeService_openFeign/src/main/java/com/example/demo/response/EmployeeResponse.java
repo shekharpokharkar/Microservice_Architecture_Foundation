@@ -10,6 +10,7 @@ public class EmployeeResponse {
 
 	private String bloodGroup;
 
+	private String departmentName;
 	private AddressResponse addressResponse;// ???
 
 	public int getId() {
@@ -61,6 +62,14 @@ public class EmployeeResponse {
 	public EmployeeResponse() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 
 }

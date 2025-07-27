@@ -1,13 +1,11 @@
 package com.example.demo.DTO;
 
-import java.util.List;
-
 public class OrganisationDetail {
 
 	private String organisationName = "SeleniumExpress";
 	private String organisationFounder = "Abhilash Panigrahi";
 	private String organisationSince = "2015";
-	private List<EmployeeDetail> employee;
+	private EmployeeName employee;
 
 	public String getOrganisationName() {
 		return organisationName;
@@ -37,17 +35,11 @@ public class OrganisationDetail {
 
 	}
 
-	@Override
-	public String toString() {
-		return "OrganisationDetail [organisationName=" + organisationName + ", organisationFounder="
-				+ organisationFounder + ", organisationSince=" + organisationSince + "]";
-	}
-
-	public List<EmployeeDetail> getEmployee() {
+	public EmployeeName getEmployee() {
 		return employee;
 	}
 
-	public void setEmployee(List<EmployeeDetail> employee) {
+	public void setEmployee(EmployeeName employee) {
 		this.employee = employee;
 	}
 

@@ -13,17 +13,20 @@ public class Employee {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private int id;
-	
-	@Column(name="name")
+
+	@Column(name = "name")
 	private String name;
-	
-	@Column(name="email")
+
+	@Column(name = "email")
 	private String email;
-	
-	@Column(name="bloodgroup")
+
+	@Column(name = "bloodgroup")
 	private String bloodGroup;
+
+	
+	private String departmentName;
 
 	public int getId() {
 		return id;
@@ -56,16 +59,19 @@ public class Employee {
 	public void setBloodGroup(String bloodGroup) {
 		this.bloodGroup = bloodGroup;
 	}
-	
-	
-	
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", email=" + email + ", bloodGroup=" + bloodGroup
+				+ ", departmentName=" + departmentName + "]";
+	}
+
 }
-
-
-
-
-
-
-
-
-

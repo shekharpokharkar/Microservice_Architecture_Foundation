@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.demo.DTO.EmployeeRequest;
 import com.example.demo.DTO.EmployeeResponse;
 
-
-@FeignClient(name="EMPLOYEESERVICE",path ="/employee-app/api",fallback = EmployeeResponseFallBack.class)
+@FeignClient(name = "employeeservice", path = "/employee-app/api")
 public interface EmployeeFeignClient {
 
 	@GetMapping("/employees/{id}")
